@@ -29,6 +29,7 @@ public class ASTBuilder extends MxStarBaseVisitor <Node> {
         ClassDefNode ret = new ClassDefNode();
         for (MxStarParser.NoAssignVarDecContext p : ctx.noAssignVarDec()) {
             ret.childs.add(visit(p));
+            //System.out.println(p.getText());
         }
         for (MxStarParser.FunctionDefContext p : ctx.functionDef()) {
             ret.childs.add(visit(p));
@@ -40,14 +41,24 @@ public class ASTBuilder extends MxStarBaseVisitor <Node> {
     @Override public VarDefStateNode visitNoAssignVarDec(MxStarParser.NoAssignVarDecContext ctx) {
         VarDefStateNode ret = new VarDefStateNode();
         ret.type = TypeDef.build(ctx.paraDec().typeId().getText());
+        VarDefNode tmp = new VarDefNode();
+        TerminalNode end = ctx.paraDec().Identifier();
+        tmp.id = end.getText();
+     //   System.out.println(tmp.id);
+        tmp.type = ret.type;
+        tmp.pos = new PositionDef(end.getSymbol());
+        ret.childs.add(tmp);
+
         for (int i = 0 ; i < ctx.Identifier().size() ; ++ i) {
-            VarDefNode tmp = new VarDefNode();
-            TerminalNode end = ctx.Identifier(i);
+            tmp = new VarDefNode();
+            end = ctx.Identifier(i);
             tmp.id = end.getText();
+     //       System.out.println(tmp.id);
             tmp.type = ret.type;
-            tmp.pos = new PositionDef(end.getSymbol());     //shenmeyisi88888888888888888888888888888888888888888888888888888888
+            tmp.pos = new PositionDef(end.getSymbol());
             ret.childs.add(tmp);
         }
+
         ret.pos = new PositionDef(ctx.start);
         return ret;
     }
@@ -186,8 +197,12 @@ public class ASTBuilder extends MxStarBaseVisitor <Node> {
 
     @Override public ReturnStateNode visitReturnState(MxStarParser.ReturnStateContext ctx) {
         ReturnStateNode ret = new ReturnStateNode();
+      //  System.out.println("RETURN");
         ret.id = ctx.Return().getText();
-        if (ctx.expression() != null) ret.childs.add(visit(ctx.expression()));
+        if (ctx.expression() != null) {
+            ret.childs.add(visit(ctx.expression()));
+      //      System.out.println("return");
+        }
         ret.pos = new PositionDef(ctx.start);
         return ret;
     }

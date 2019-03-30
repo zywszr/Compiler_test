@@ -218,7 +218,9 @@ public class SemanticChecker extends ASTVisitor {
                 throw new NoCastExpr(expr.pos);
             }
         }
-        curNode.type = new ArrayTypeDef((VarTypeDef) curNode.type, curNode.childs.size());
+        if (curNode.childs.size() > 0) {
+            curNode.type = new ArrayTypeDef((VarTypeDef) curNode.type, curNode.childs.size());
+        }
     }
 
     @Override void visit(FunEleExprNode curNode) throws Exception {
@@ -247,6 +249,7 @@ public class SemanticChecker extends ASTVisitor {
         if (child.type instanceof ArrayTypeDef) {
             if (object.id.equals("size") && object.childs.size() == 0) curNode.type = new IntTypeDef();
             else throw new NoDefinedTypeError(object.pos);
+            return;
         }
         if (!(child.type instanceof SpecialTypeDef)) throw new NoCastExpr(curNode.pos);
         ClassTypeDef nodeclass = (ClassTypeDef)rootScope.findItem(((SpecialTypeDef)child.type).getTypeId());
@@ -266,6 +269,7 @@ public class SemanticChecker extends ASTVisitor {
             return;
         }
         Pair<Scope<TypeDef>, TypeDef> ret = curNode.belong.matchVarName(curNode.id);
+     //   System.out.println(curNode.id);
         if (ret == null) throw new NoDefinedVarError(curNode.pos);
         curNode.type = ret.getValue();
     }

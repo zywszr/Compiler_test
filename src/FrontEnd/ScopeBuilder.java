@@ -43,7 +43,7 @@ public class ScopeBuilder {
     void scopeBuild(Scope<TypeDef> curScope, Node curNode) throws SyntaxError {
         curNode.belong = curScope;
         for (int i = 0 ; i < curNode.childs.size() ; ++ i) {
-        //    System.out.println(i);
+            //System.out.println(i);
             Node childnode = curNode.childs.get(i);
             if (childnode instanceof ClassDefNode) {
                 ClassScope<TypeDef> childScope = Scope.newClassScope(curScope);
@@ -57,7 +57,7 @@ public class ScopeBuilder {
                 FuncTypeDef funcType = new FuncTypeDef((VarTypeDef) childnode.type);
                 LocalScope<TypeDef> childScope = Scope.newLocalScope(curScope);
                 for (int j = 0 ; j < childnode.childs.size() - 1 ; ++ j) {
-                    VarDefNode tmpChildNode = (VarDefNode)childnode.childs.get(i);
+                    VarDefNode tmpChildNode = (VarDefNode)childnode.childs.get(j);
                     tmpChildNode.belong = childScope;
                     funcType.insert((VarTypeDef) tmpChildNode.type);
                 }
@@ -72,7 +72,9 @@ public class ScopeBuilder {
                 if (curScope instanceof ClassScope) {
                     if (!curScope.addItem(childnode.id, childnode.type)) {
                         throw new ReDefinedError(childnode.pos);
-                    }
+                    }/* else {
+                        System.out.println(childnode.id);
+                    }*/
                 }
             } else scopeBuild(curScope, childnode);
         }
@@ -87,10 +89,10 @@ public class ScopeBuilder {
         curNode.belong = curScope;
         for (int i = 0 ; i < curNode.childs.size() ; ++ i) {
             Node childnode = curNode.childs.get(i);
-            if (childnode == null) {
+        /*    if (childnode == null) {
                 System.out.println(curNode.childs.size());
             }
-            if (childnode instanceof BlockStateNode) {
+        */    if (childnode instanceof BlockStateNode) {
                 LocalScope<TypeDef> childScope = Scope.newLocalScope(curScope);
                 localScopeBuild(childScope, childnode);
             } else {
