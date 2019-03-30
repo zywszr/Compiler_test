@@ -11,8 +11,8 @@ import java.io.*;
 
 public class Main {
     public static void main (String[] args) throws IOException, Exception {
-        InputStream in = new FileInputStream("test.txt");
-        ANTLRInputStream input = new ANTLRInputStream(in);
+        //InputStream in = new FileInputStream("test.txt");
+        ANTLRInputStream input = new ANTLRInputStream(System.in);
         MxStarLexer lexer = new MxStarLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         MxStarParser parser = new MxStarParser(tokens);
