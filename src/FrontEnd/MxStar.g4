@@ -222,7 +222,8 @@ LogicLiteral
 ;
 
 IntLiteral
-    : [1-9] (DIGIT)*
+    : ([1-9] (DIGIT)*)
+    | '0'
 ;
 
 StringLiteral
