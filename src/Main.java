@@ -11,7 +11,7 @@ import java.io.*;
 
 public class Main {
     public static void main (String[] args) throws IOException, Exception {
-        //InputStream in = new FileInputStream("test.txt");
+    //   InputStream in = new FileInputStream("test.txt");
         ANTLRInputStream input = new ANTLRInputStream(System.in);
         MxStarLexer lexer = new MxStarLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -38,6 +38,7 @@ public class Main {
         try {
             ASTroot.accept(checker);
         } catch (SyntaxError error) {
+            System.out.println(error.toString() + " on Line: " + error.pos.line + ",  Column: " + error.pos.column);
             throw error;
         }
     }
